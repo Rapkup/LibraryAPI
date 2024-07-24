@@ -18,9 +18,15 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\LibraryApi.Application\LibraryApi.Application.csproj" />
     <ProjectReference Include="..\libraryapi.client\libraryapi.client.esproj">
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>
+    <ProjectReference Include="..\LibraryApi.Infrastructure\LibraryApi.Infrastructure.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Controllers\" />
   </ItemGroup>
 
 </Project>
