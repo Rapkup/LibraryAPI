@@ -1,5 +1,6 @@
-using  LibraryApi.Infrastructure;
-using  LibraryApi.Application;
+using LibraryApi.Infrastructure;
+using LibraryApi.Application;
+using LibraryApi.Server.Middleware.CustomExceptionHandle;
 
 
 namespace LibraryAPI.Server
@@ -9,6 +10,7 @@ namespace LibraryAPI.Server
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+
 
 
             builder.Services.AddControllers();
@@ -30,6 +32,10 @@ namespace LibraryAPI.Server
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
+
+            // Global error handler
+            app.UseMiddleware<ExceptionHandlingMiddleware>();
+
 
             app.UseAuthorization();
 
