@@ -7,8 +7,9 @@ namespace LibraryApi.Application
     {
         public static IServiceCollection AddAplictaion(this IServiceCollection services)
         {
-            var assembly = typeof(DependecyInjection).Assembly;
 
+            var assembly = typeof(DependecyInjection).Assembly;
+            services.AddAutoMapper(assembly);
             services.AddValidatorsFromAssembly(assembly);
 
             return services;

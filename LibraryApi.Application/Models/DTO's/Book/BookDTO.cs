@@ -1,12 +1,13 @@
-﻿using LibraryApi.Domain.Entities;
-using System.ComponentModel.DataAnnotations;
-using System.Diagnostics.CodeAnalysis;
+﻿using LibraryApi.Domain.Models;
+using System;
+using System.Net;
 
-namespace LibraryApi.Domain.Models
+namespace LibraryApi.Application.Models
 {
-    public class Book: IEntity
+    public class BookDTO
     {
-        public int ISBN { get; set; } 
+        public int Id { get; set; }
+        public int ISBN { get; set; }
         public string Title { get; set; }
         public string? Genre { get; set; }
         public string? Description { get; set; }
@@ -18,6 +19,7 @@ namespace LibraryApi.Domain.Models
         public DateOnly? TakenAt { get; set; }
         public DateOnly? ShouldBeReturnedAt { get; set; }
 
-        public virtual Author? Author { get; set; }
+        public DateTime CreatedAt { get; set; }
+        public DateTime UpdatedAt { get; set; }
     }
 }
