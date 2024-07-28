@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using LibraryApi.Domain.Models;
 
-namespace DAL.Models
+namespace LibraryApi.Application.Models
 {
-    public class Author
+    public class AuthorDTO
     {
         public int Id { get; set; }
         public string Name { get; set; }
@@ -14,5 +10,7 @@ namespace DAL.Models
         public DateOnly Birthday { get; set; }
         public string Country { get; set; }
 
+        public DateTime CreatedAt { get; set; }
+        public DateTime UpdatedAt { get; set; }
     }
 }

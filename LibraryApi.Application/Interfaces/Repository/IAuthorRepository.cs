@@ -1,6 +1,8 @@
-﻿namespace LibraryApi.Application.Interfaces.Repository
+﻿using LibraryApi.Domain.Models;
+
+namespace LibraryApi.Application.Interfaces.Repository
 {
-    public interface IAuthorRepository
+    public interface IAuthorRepository : IGenericRepository<Author>
     {
     }
 }
