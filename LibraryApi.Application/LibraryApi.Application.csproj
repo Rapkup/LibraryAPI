@@ -16,10 +16,4 @@
     <ProjectReference Include="..\LibraryApi.Domain\LibraryApi.Domain.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Models\DTO%27s\Book\Requests\" />
-    <Folder Include="Models\DTO%27s\Book\Responces\" />
-    <Folder Include="Services\" />
-  </ItemGroup>
-
 </Project>

@@ -7,6 +7,6 @@ namespace LibraryApi.Domain.Entities
         public int Id { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.Now;
         public DateTime UpdatedAt { get; set; } = DateTime.Now;
-        public int Status { get; set; }
+        public int Status { get; set; } = 1;
     }
 }

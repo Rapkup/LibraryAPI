@@ -1,6 +1,4 @@
 ﻿using LibraryApi.Domain.Entities;
-using System.ComponentModel.DataAnnotations;
-using System.Diagnostics.CodeAnalysis;
 
 namespace LibraryApi.Domain.Models
 {

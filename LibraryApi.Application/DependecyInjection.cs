@@ -5,7 +5,7 @@ namespace LibraryApi.Application
 {
     public static class DependecyInjection
     {
-        public static IServiceCollection AddAplictaion(this IServiceCollection services)
+        public static IServiceCollection AddApplictaion(this IServiceCollection services)
         {
 
             var assembly = typeof(DependecyInjection).Assembly;
