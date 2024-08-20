@@ -5,9 +5,9 @@ using LibraryApi.Domain.Models;
 
 namespace LibraryApi.Application.Validators.Authors
 {
-    public class AddAuthorValidator : AbstractValidator<AuthorDTO>
+    public class AuthorValidator : AbstractValidator<AuthorDTO>
     {
-        public AddAuthorValidator()
+        public AuthorValidator()
         {
             RuleFor(author => author.Name)
                 .NotEmpty().WithMessage("Name is required.")
