@@ -30,12 +30,14 @@ namespace LibraryApi.Infrastructure.Implementations.Repositories
 
         public virtual async Task<IEnumerable<T>> All()
         {
-            throw new NotImplementedException();
+            return await _dbSet.ToListAsync();
         }
 
-        public virtual Task<bool> Delete(int id)
+        public virtual async Task<bool> Delete(int id)
         {
-            throw new NotImplementedException();
+            var entity = await _dbSet.FindAsync(id);
+            _dbSet.Remove(entity);
+            return true;
         }
 
         public virtual async Task<T?> GetById(int id)
@@ -45,10 +47,11 @@ namespace LibraryApi.Infrastructure.Implementations.Repositories
 
         public virtual async Task<bool> Update(T entity)
         {
-            throw new NotImplementedException();
+            _dbSet.Update(entity);
+            return true;
         }
 
-        public async Task<IQueryable<T>> FindQueryableAsync(Expression<Func<T, bool>> expression, 
+        public async Task<IQueryable<T>> FindQueryableAsync(Expression<Func<T, bool>> expression,
             Func<IQueryable<T>, IOrderedQueryable<T>>? orderBy = null)
         {
             var query = _dbSet.Where(expression);
