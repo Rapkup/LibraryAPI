@@ -46,7 +46,7 @@ namespace LibraryApi.Server.Controllers
 
         [Authorize(Policy = Policies.User)]
         [HttpPost("create")]
-        public async Task<IActionResult> CreateAuthor([FromBody] AuthorCreateResponse authorCreateDto)
+        public async Task<IActionResult> CreateAuthor([FromBody] AuthorCreateRequest authorCreateDto)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);

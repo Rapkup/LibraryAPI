@@ -24,7 +24,7 @@ namespace LibraryApi.Application.Services
             _userManager = userManager;
         }
 
-        public async Task<TokenResponse> Login(LoginUserRequest user)
+        public async Task<TokenResponse> Login(UserLoginRequest user)
         {
             var response = new TokenResponse();
             var identityUser = await _userManager.FindByNameAsync(user.Login);
@@ -46,7 +46,7 @@ namespace LibraryApi.Application.Services
             return response;
         }
 
-        public async Task<bool> RegisterUser(RegisterUserRequest user)
+        public async Task<bool> RegisterUser(UserRegisterRequest user)
         {
             var userExists = await _userManager.FindByNameAsync(user.UserName);
             if (userExists != null)
@@ -69,7 +69,7 @@ namespace LibraryApi.Application.Services
 
             await _userManager.AddToRoleAsync(newUser, "User");
 
-            var loginResult = await Login(new LoginUserRequest { Login = newUser.UserName, Password = user.Password });
+            var loginResult = await Login(new UserLoginRequest { Login = newUser.UserName, Password = user.Password });
 
             if(loginResult.IsLogedIn != true)
                 return false;

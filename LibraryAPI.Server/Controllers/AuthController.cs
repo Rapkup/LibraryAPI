@@ -18,7 +18,7 @@ namespace LibraryApi.Server.Controllers
 
         [HttpPost("/Login")]
         [AllowAnonymous]
-        public async Task<IActionResult> Login([FromBody] LoginUserRequest userRequest)
+        public async Task<IActionResult> Login([FromBody] UserLoginRequest userRequest)
         {
             if (!ModelState.IsValid)
             {
@@ -36,7 +36,7 @@ namespace LibraryApi.Server.Controllers
 
         [HttpPost("Register")]
         [AllowAnonymous]
-        public async Task<IActionResult> RegisterUser([FromBody] RegisterUserRequest user)
+        public async Task<IActionResult> RegisterUser([FromBody] UserRegisterRequest user)
         {
             if (await _authService.RegisterUser(user))
             {

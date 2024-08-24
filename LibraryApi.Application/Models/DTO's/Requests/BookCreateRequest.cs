@@ -2,9 +2,8 @@
 
 namespace LibraryApi.Application.Models.DTO_s.Responces
 {
-    public class BookUpdateResponce : CommonFieldsBookDTO
+    public class BookCreateRequest : CommonFieldsBookDTO
     {
-        public int Id { get; set; }
 
     }
 }

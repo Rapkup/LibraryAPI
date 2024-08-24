@@ -1,6 +1,6 @@
-﻿namespace LibraryApi.Application.Models.DTO_s.Responces
+﻿namespace LibraryApi.Application.Models.DTO_s.Author
 {
-    public class AuthorCreateResponse
+    public class CommonFieldsAuthorDTO
     {
         public string Name { get; set; }
         public string MiddleName { get; set; }

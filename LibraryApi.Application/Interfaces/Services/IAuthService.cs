@@ -6,8 +6,8 @@ namespace LibraryApi.Application.Interfaces.Services
 {
     public interface IAuthService
     {
-        Task<TokenResponse> Login(LoginUserRequest user);
+        Task<TokenResponse> Login(UserLoginRequest user);
         Task<TokenResponse> RefreshToken(RefreshTokenModel model);
-        Task<bool> RegisterUser(RegisterUserRequest user);
+        Task<bool> RegisterUser(UserRegisterRequest user);
     }
 }

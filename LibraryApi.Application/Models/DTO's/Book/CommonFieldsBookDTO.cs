@@ -1,6 +1,6 @@
-﻿namespace LibraryApi.Application.Models.DTO_s.Responces
+﻿namespace LibraryApi.Application.Models.DTO_s.Book
 {
-    public class BookCreateResponse
+    public class CommonFieldsBookDTO
     {
         public int ISBN { get; set; }
         public string Title { get; set; }

@@ -1,6 +1,6 @@
 ﻿namespace LibraryApi.Application.Models.DTO_s.Requests
 {
-    public class RegisterUserRequest
+    public class UserRegisterRequest
     {
         public string UserName { get; set; }
         public string FirstName { get; set; }
