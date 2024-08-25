@@ -25,7 +25,7 @@ namespace LibraryApi.Server.Controllers
         public async Task<IActionResult> Login([FromBody] UserLoginRequest userRequest)
         {
             if (!ModelState.IsValid)
-                return BadRequest();
+               throw new BadHttpRequestException("Not valid body request");
 
             return await _loginUseCase.Execute(userRequest);
         }

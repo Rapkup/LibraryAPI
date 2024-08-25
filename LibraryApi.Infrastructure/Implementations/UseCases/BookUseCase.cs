@@ -3,6 +3,7 @@ using LibraryApi.Application.Interfaces.UnitOfWork;
 using LibraryApi.Application.Interfaces.UseCases;
 using LibraryApi.Application.Models;
 using LibraryApi.Application.Models.DTO_s.Responces;
+using LibraryApi.Application.Validators.Books;
 using LibraryApi.Domain.Models;
 using Microsoft.AspNetCore.Mvc;
 
@@ -12,11 +13,13 @@ namespace LibraryApi.Infrastructure.Implementations.UseCases
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
+        private readonly BookValidator _validator;
 
-        public BookUseCase(IUnitOfWork unitOfWork, IMapper mapper)
+        public BookUseCase(IUnitOfWork unitOfWork, IMapper mapper, BookValidator validator)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
+            _validator = validator;
         }
 
         public async Task<IActionResult> GetAllBooks()
@@ -61,6 +64,9 @@ namespace LibraryApi.Infrastructure.Implementations.UseCases
 
         public async Task<IActionResult> CreateBook(BookCreateRequest bookDto)
         {
+            if (_validator.ValidateAsync(bookDto).Result.IsValid)
+                return new BadRequestResult();
+
             var book = _mapper.Map<Book>(bookDto);
             var created = await _unitOfWork.Books.Add(book);
             if (created)
@@ -73,6 +79,9 @@ namespace LibraryApi.Infrastructure.Implementations.UseCases
 
         public async Task<IActionResult> UpdateBook(int id, BookUpdateResponce bookDto)
         {
+            if (_validator.ValidateAsync(bookDto).Result.IsValid)
+                return new BadRequestResult();
+
             if (id != bookDto.Id)
             {
                 return new BadRequestResult();

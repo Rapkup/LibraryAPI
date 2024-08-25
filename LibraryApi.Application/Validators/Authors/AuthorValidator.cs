@@ -1,11 +1,12 @@
 ﻿using FluentValidation;
 using LibraryApi.Application.Models;
+using LibraryApi.Application.Models.DTO_s.Author;
 using LibraryApi.Domain.Entities;
 using LibraryApi.Domain.Models;
 
 namespace LibraryApi.Application.Validators.Authors
 {
-    public class AuthorValidator : AbstractValidator<AuthorDTO>
+    public class AuthorValidator : AbstractValidator<CommonFieldsAuthorDTO>
     {
         public AuthorValidator()
         {

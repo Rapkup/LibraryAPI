@@ -1,8 +1,9 @@
 ﻿using AutoMapper;
 using LibraryApi.Application.Interfaces.UnitOfWork;
 using LibraryApi.Application.Interfaces.UseCases;
-using LibraryApi.Application.Models.DTO_s.Responces;
 using LibraryApi.Application.Models;
+using LibraryApi.Application.Models.DTO_s.Responces;
+using LibraryApi.Application.Validators.Authors;
 using LibraryApi.Domain.Models;
 using Microsoft.AspNetCore.Mvc;
 
@@ -13,11 +14,13 @@ namespace LibraryApi.Infrastructure.Implementations.UseCases
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
+        private readonly AuthorValidator _validator;
 
-        public AuthorUseCase(IUnitOfWork unitOfWork, IMapper mapper)
+        public AuthorUseCase(IUnitOfWork unitOfWork, IMapper mapper, AuthorValidator validator)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
+            _validator = validator;
         }
 
         public async Task<IActionResult> GetAllAuthors()
@@ -38,7 +41,11 @@ namespace LibraryApi.Infrastructure.Implementations.UseCases
 
         public async Task<IActionResult> CreateAuthor(AuthorCreateRequest authorCreateDto)
         {
+            if (_validator.ValidateAsync(authorCreateDto).Result.IsValid)
+                return new BadRequestResult();
+
             var author = _mapper.Map<Author>(authorCreateDto);
+
             var createdAuthor = await _unitOfWork.Authors.Add(author);
             if (createdAuthor)
             {
@@ -46,11 +53,13 @@ namespace LibraryApi.Infrastructure.Implementations.UseCases
                 return new OkObjectResult(authorCreateDto);
             }
             return new StatusCodeResult(500);
+
         }
 
         public async Task<IActionResult> UpdateAuthor(int id, AuthorUpdateResponce authorDto)
         {
-            if (id != authorDto.Id)
+
+            if (id != authorDto.Id || !_validator.ValidateAsync(authorDto).Result.IsValid)
                 return new BadRequestResult();
 
             var author = _mapper.Map<Author>(authorDto);
