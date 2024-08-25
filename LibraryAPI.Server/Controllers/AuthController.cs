@@ -1,4 +1,4 @@
-﻿using LibraryApi.Application.Interfaces.Services;
+﻿using LibraryApi.Application.Interfaces.UseCases;
 using LibraryApi.Application.Models.DTO_s;
 using LibraryApi.Application.Models.DTO_s.Requests;
 using LibraryApi.Infrastructure.Authorization.Policies;
@@ -9,52 +9,39 @@ namespace LibraryApi.Server.Controllers
 {
     public class AuthController : ControllerBase
     {
-        private readonly IAuthService _authService;
+        private readonly ILoginUseCase _loginUseCase;
+        private readonly IRefreshTokenUseCase _refreshTokenUseCase;
+        private readonly IRegisterUseCase _registerUseCase;
 
-        public AuthController(IAuthService authService)
+        public AuthController(ILoginUseCase loginUseCase, IRefreshTokenUseCase refreshTokenUseCase, IRegisterUseCase registerUseCase)
         {
-            _authService = authService;
+            _loginUseCase = loginUseCase;
+            _refreshTokenUseCase = refreshTokenUseCase;
+            _registerUseCase = registerUseCase;
         }
 
         [HttpPost("/Login")]
         [AllowAnonymous]
-        public async Task<IActionResult> Login([FromBody] LoginUserRequest userRequest)
+        public async Task<IActionResult> Login([FromBody] UserLoginRequest userRequest)
         {
             if (!ModelState.IsValid)
-            {
-                return BadRequest();
-            }
-            var loginResult = await _authService.Login(userRequest);
+               throw new BadHttpRequestException("Not valid body request");
 
-            if (loginResult.IsLogedIn)
-            {
-                return Ok(loginResult);
-            }
-            return Unauthorized();
-
+            return await _loginUseCase.Execute(userRequest);
         }
 
         [HttpPost("Register")]
         [AllowAnonymous]
-        public async Task<IActionResult> RegisterUser([FromBody] RegisterUserRequest user)
+        public async Task<IActionResult> RegisterUser([FromBody] UserRegisterRequest user)
         {
-            if (await _authService.RegisterUser(user))
-            {
-                return Ok("Successfully done");
-            }
-            return BadRequest("Something went wrong");
+            return await _registerUseCase.Execute(user);
         }
 
         [HttpPost("RefreshToken")]
         [Authorize(Policy = Policies.AdminOrUser)]
         public async Task<IActionResult> RefreshToken([FromBody] RefreshTokenModel model)
         {
-            var loginResult = await _authService.RefreshToken(model);
-            if (loginResult.IsLogedIn)
-            {
-                return Ok(loginResult);
-            }
-            return Unauthorized();
+            return await _refreshTokenUseCase.Execute(model);
         }
     }
 }

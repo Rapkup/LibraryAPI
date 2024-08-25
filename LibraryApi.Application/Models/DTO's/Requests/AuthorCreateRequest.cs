@@ -2,8 +2,7 @@
 
 namespace LibraryApi.Application.Models.DTO_s.Responces
 {
-    public class AuthorUpdateResponce : CommonFieldsAuthorDTO
+    public class AuthorCreateRequest : CommonFieldsAuthorDTO
     {
-        public int Id { get; set; }
     }
 }

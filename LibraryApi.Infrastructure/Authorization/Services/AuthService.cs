@@ -1,6 +1,5 @@
 ﻿using LibraryApi.Application.Interfaces.Services;
 using LibraryApi.Application.Models.DTO_s;
-using LibraryApi.Application.Models.DTO_s.Requests;
 using LibraryApi.Application.Models.DTO_s.Responces;
 using LibraryApi.Infrastructure.Authorization.Models;
 using Microsoft.AspNetCore.Identity;
@@ -24,7 +23,7 @@ namespace LibraryApi.Application.Services
             _userManager = userManager;
         }
 
-        public async Task<TokenResponse> Login(LoginUserRequest user)
+    /*    public async Task<TokenResponse> Login(UserLoginRequest user)
         {
             var response = new TokenResponse();
             var identityUser = await _userManager.FindByNameAsync(user.Login);
@@ -46,7 +45,7 @@ namespace LibraryApi.Application.Services
             return response;
         }
 
-        public async Task<bool> RegisterUser(RegisterUserRequest user)
+        public async Task<bool> RegisterUser(UserRegisterRequest user)
         {
             var userExists = await _userManager.FindByNameAsync(user.UserName);
             if (userExists != null)
@@ -69,13 +68,13 @@ namespace LibraryApi.Application.Services
 
             await _userManager.AddToRoleAsync(newUser, "User");
 
-            var loginResult = await Login(new LoginUserRequest { Login = newUser.UserName, Password = user.Password });
+            var loginResult = await Login(new UserLoginRequest { Login = newUser.UserName, Password = user.Password });
 
             if(loginResult.IsLogedIn != true)
                 return false;
 
             return true;
-        }
+        }*/
 
         public async Task<TokenResponse> RefreshToken(RefreshTokenModel model)
         {
@@ -101,7 +100,7 @@ namespace LibraryApi.Application.Services
             return response;
         }
 
-        private async Task<string> GenerateAccessTokenString(User user)
+        public async Task<string> GenerateAccessTokenString(User user)
         {
             var authClaims = new List<Claim>
             {
@@ -131,7 +130,7 @@ namespace LibraryApi.Application.Services
             return tokenString;
         }
 
-        private string GenerateRefreshTokenString()
+        public string GenerateRefreshTokenString()
         {
             var randomNumber = new byte[64];
 
@@ -143,7 +142,7 @@ namespace LibraryApi.Application.Services
             return Convert.ToBase64String(randomNumber);
         }
 
-        private ClaimsPrincipal? GetTokenPrincipal(string token)
+        public ClaimsPrincipal? GetTokenPrincipal(string token)
         {
 
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config.GetSection("JWT:Secret").Value));

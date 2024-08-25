@@ -14,65 +14,47 @@ namespace LibraryApi.Infrastructure.Implementations.Repositories
 
         public override async Task<IEnumerable<Author>> All()
         {
-            try
-            {
-                return await _dbSet.Where(x => x.Status == 1)
-                    .AsNoTracking()
-                    .AsSplitQuery()
-                    .OrderBy(x => x.Name)
-                    .ToListAsync();
-            }
-            catch (Exception e)
-            {
-                _logger.LogError(e, "{Repo} All function error", typeof(AuthorRepository));
-                throw;
-            }
+
+            return await _dbSet.Where(x => x.Status == 1)
+                .AsNoTracking()
+                .AsSplitQuery()
+                .OrderBy(x => x.Name)
+                .ToListAsync();
+
         }
+
 
         public override async Task<bool> Delete(int id)
         {
-            try
-            {
-                var result = await _dbSet.FirstOrDefaultAsync(x => x.Id == id);
 
-                if (result == null)
-                    return false;
+            var result = await _dbSet.FirstOrDefaultAsync(x => x.Id == id);
 
-                result.Status = 0;
-                result.UpdatedAt = DateTime.UtcNow;
+            if (result == null)
+                return false;
 
-                return true;
-            }
-            catch (Exception e)
-            {
-                _logger.LogError(e, "{Repo} Delete function error", typeof(AuthorRepository));
-                throw;
-            }
+            result.Status = 0;
+            result.UpdatedAt = DateTime.UtcNow;
+
+            return true;
+
         }
 
         public override async Task<bool> Update(Author author)
         {
-            try
-            {
-                var result = await _dbSet.FirstOrDefaultAsync(x => x.Id == author.Id);
 
-                if (result == null)
-                    return false;
+            var result = await _dbSet.FirstOrDefaultAsync(x => x.Id == author.Id);
 
-                result.UpdatedAt = DateTime.UtcNow;
-                result.Name = author.Name;
-                result.MiddleName = author.MiddleName;
-                result.Birthday = author.Birthday;
-                result.Country = author.Country;
+            if (result == null)
+                return false;
 
-                return true;
-            }
-            catch (Exception e)
-            {
+            result.UpdatedAt = DateTime.UtcNow;
+            result.Name = author.Name;
+            result.MiddleName = author.MiddleName;
+            result.Birthday = author.Birthday;
+            result.Country = author.Country;
 
-                _logger.LogError(e, "{Repo} Update function error", typeof(AuthorRepository));
-                throw;
-            }
+            return true;
+
         }
 
     }

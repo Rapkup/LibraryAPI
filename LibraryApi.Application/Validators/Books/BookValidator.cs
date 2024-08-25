@@ -1,13 +1,13 @@
 ﻿using FluentValidation;
 using LibraryApi.Application.Models;
+using LibraryApi.Application.Models.DTO_s.Book;
 
 namespace LibraryApi.Application.Validators.Books
 {
-    public class BookValidator : AbstractValidator<BookDTO>
+    public class BookValidator : AbstractValidator<CommonFieldsBookDTO>
     {
         public BookValidator()
         {
-            RuleFor(book => book.Id).NotEmpty();
             RuleFor(book => book.ISBN).NotEmpty().GreaterThan(0);
             RuleFor(book => book.Title).NotEmpty().MaximumLength(255);
             RuleFor(book => book.Genre).MaximumLength(100);
@@ -17,8 +17,6 @@ namespace LibraryApi.Application.Validators.Books
             RuleFor(book => book.TakenBy).GreaterThan(0).When(book => book.TakenBy.HasValue);
             RuleFor(book => book.TakenAt).Must(BeAValidDate).When(book => book.TakenAt.HasValue);
             RuleFor(book => book.ShouldBeReturnedAt).Must(BeAValidDate).When(book => book.ShouldBeReturnedAt.HasValue);
-            RuleFor(book => book.CreatedAt).NotEmpty().Must(BeAValidDate);
-            RuleFor(book => book.UpdatedAt).NotEmpty().Must(BeAValidDate);
         }
 
         private bool BeAValidDate(DateOnly? date)

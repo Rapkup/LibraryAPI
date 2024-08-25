@@ -24,7 +24,7 @@ namespace LibraryApi.Application.Mapper
                 .ForMember(dest => dest.UpdatedAt, opt => opt.MapFrom(src => src.UpdatedAt))
                 .ReverseMap();
 
-            CreateMap<BookCreateResponse, Book>()
+            CreateMap<BookCreateRequest, Book>()
                .ForMember(dest => dest.ISBN, opt => opt.MapFrom(src => src.ISBN))
                .ForMember(dest => dest.Title, opt => opt.MapFrom(src => src.Title))
                .ForMember(dest => dest.Genre, opt => opt.MapFrom(src => src.Genre))

@@ -19,7 +19,7 @@ namespace LibraryApi.Application.Mapper
                .ForMember(dest => dest.UpdatedAt, opt => opt.MapFrom(src => src.UpdatedAt))
                .ReverseMap();
 
-            CreateMap<AuthorCreateResponse, Author>()
+            CreateMap<AuthorCreateRequest, Author>()
                 .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name))
                 .ForMember(dest => dest.MiddleName, opt => opt.MapFrom(src => src.MiddleName))
                 .ForMember(dest => dest.Birthday, opt => opt.MapFrom(src => src.Birthday))
