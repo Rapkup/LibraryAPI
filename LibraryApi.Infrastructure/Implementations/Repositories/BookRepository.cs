@@ -63,7 +63,7 @@ namespace LibraryApi.Infrastructure.Implementations.Repositories
 
 
 
-        public virtual async Task<IEnumerable<Book>> GetAllBooksByAuthor(int id)
+        public  async Task<IEnumerable<Book>> GetAllBooksByAuthor(int id)
         {
 
             return await _dbSet.Where(x => x.AuthorId == id && x.Status == 1)
@@ -92,13 +92,14 @@ namespace LibraryApi.Infrastructure.Implementations.Repositories
         }
         public async Task<bool> GiveBookToUser(int bookId, int UserId)
         {
-            var book = _dbSet.FirstAsync(x => x.Id == bookId);
+            var book = await _dbSet.FirstAsync(x => x.Id == bookId);
 
-            book.Result.TakenBy = UserId;
-            book.Result.TakenAt = DateOnly.FromDateTime(DateTime.Today);
-            book.Result.ShouldBeReturnedAt = DateOnly.FromDateTime(DateTime.Today.AddMonths(1));
+            book.TakenBy = UserId;
+            book.TakenAt = DateOnly.FromDateTime(DateTime.Today);
+            book.ShouldBeReturnedAt = DateOnly.FromDateTime(DateTime.Today.AddMonths(1));
 
-            var res = await Update(book.Result);
+            var res = await Update(book);
+
             if (res)
                 return true;
             else return false;

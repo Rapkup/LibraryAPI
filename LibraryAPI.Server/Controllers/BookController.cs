@@ -1,8 +1,5 @@
-﻿using AutoMapper;
-using LibraryApi.Application.Interfaces.UnitOfWork;
-using LibraryApi.Application.Models;
+﻿using LibraryApi.Application.Interfaces.UseCases;
 using LibraryApi.Application.Models.DTO_s.Responces;
-using LibraryApi.Domain.Models;
 using LibraryApi.Infrastructure.Authorization.Policies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -13,35 +10,25 @@ namespace LibraryApi.Server.Controllers
     [ApiController]
     public class BookController : ControllerBase
     {
-        private readonly IUnitOfWork _unitOfWork;
-        private readonly IMapper _mapper;
+        private readonly IBookUseCase _bookUseCase;
 
-        public BookController(IUnitOfWork unitOfWork, IMapper mapper)
+        public BookController(IBookUseCase bookUseCase)
         {
-            _unitOfWork = unitOfWork;
-            _mapper = mapper;
+            _bookUseCase = bookUseCase;
         }
 
         [Authorize(Policy = Policies.AdminOrUser)]
         [HttpGet("getAllBooks")]
         public async Task<IActionResult> GetAllBooks()
         {
-            var books = await _unitOfWork.Books.All();
-            var bookDtos = _mapper.Map<IEnumerable<BookDTO>>(books);
-            return Ok(bookDtos);
+            return await _bookUseCase.GetAllBooks();
         }
 
         [Authorize(Policy = Policies.AdminOrUser)]
         [HttpGet("get/{id}")]
         public async Task<IActionResult> GetBookById(int id)
         {
-            var book = await _unitOfWork.Books.GetById(id);
-            if (book == null)
-            {
-                return NotFound();
-            }
-            var bookDto = _mapper.Map<BookDTO>(book);
-            return Ok(bookDto);
+            return await _bookUseCase.GetBookById(id);
         }
 
 
@@ -49,31 +36,21 @@ namespace LibraryApi.Server.Controllers
         [HttpGet("getByAuthor/{authorId}")]
         public async Task<IActionResult> GetBooksByAuthor(int authorId)
         {
-            var books = await _unitOfWork.Books.GetAllBooksByAuthor(authorId);
-            var bookDtos = _mapper.Map<IEnumerable<BookDTO>>(books);
-            return Ok(bookDtos);
+            return await _bookUseCase.GetBooksByAuthor(authorId);
         }
 
         [Authorize(Policy = Policies.AdminOrUser)]
         [HttpGet("getBookByUser/{userId}")]
         public async Task<IActionResult> GetBooksByUser(int userId)
         {
-            var books = await _unitOfWork.Books.GetAllBooksByUserLogin(userId);
-            var bookDtos = _mapper.Map<IEnumerable<BookDTO>>(books);
-            return Ok(bookDtos);
+            return await _bookUseCase.GetBooksByUser(userId);
         }
 
         [Authorize(Policy = Policies.AdminOrUser)]
         [HttpGet("getByISBN/{isbn}")]
         public async Task<IActionResult> GetBookByISBN(int isbn)
         {
-            var book = await _unitOfWork.Books.GetByISBN(isbn);
-            if (book == null)
-            {
-                return NotFound();
-            }
-            var bookDto = _mapper.Map<BookDTO>(book);
-            return Ok(bookDto);
+            return await _bookUseCase.GetBookByISBN(isbn);
         }
 
         [Authorize(Policy = Policies.User)]
@@ -85,49 +62,34 @@ namespace LibraryApi.Server.Controllers
                 return BadRequest(ModelState);
             }
 
-            var book = _mapper.Map<Book>(bookDto);
-            var created = await _unitOfWork.Books.Add(book);
-            if (created)
-            {
-                await _unitOfWork.CompleteAsync();
-                return Ok(bookDto);
-            }
-
-            return StatusCode(500, "A problem happened while handling your request.");
+            return await _bookUseCase.CreateBook(bookDto);
         }
 
         [Authorize(Policy = Policies.User)]
         [HttpPut("update/{id}")]
         public async Task<IActionResult> UpdateBook(int id, [FromBody] BookUpdateResponce bookDto)
         {
-            if (!ModelState.IsValid || id != bookDto.Id)
+            if (!ModelState.IsValid)
             {
                 return BadRequest();
             }
 
-            var book = _mapper.Map<Book>(bookDto);
-            var updated = await _unitOfWork.Books.Update(book);
-            if (updated)
-            {
-                await _unitOfWork.CompleteAsync();
-                return Ok(bookDto);
-            }
-
-            return NoContent();
+            return await _bookUseCase.UpdateBook(id, bookDto);
         }
 
         [Authorize(Policy = Policies.User)]
         [HttpDelete("delete/{id}")]
         public async Task<IActionResult> DeleteBook(int id)
         {
-            var deleted = await _unitOfWork.Books.Delete(id);
-            if (deleted)
-            {
-                await _unitOfWork.CompleteAsync();
-                return Ok(deleted);
-            }
-
-            return NoContent();
+            return await _bookUseCase.DeleteBook(id);
         }
+
+        [Authorize(Policy = Policies.User)]
+        [HttpPost("borrow-book/{id}")]
+        public async Task<IActionResult> GiveBookToUser(int bookId, int userId)
+        {
+            return await _bookUseCase.GiveBookToUser(bookId, userId);
+        }
+
     }
 }

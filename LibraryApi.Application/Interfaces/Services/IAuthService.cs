@@ -1,13 +1,13 @@
-﻿using LibraryApi.Application.Models.DTO_s;
-using LibraryApi.Application.Models.DTO_s.Requests;
-using LibraryApi.Application.Models.DTO_s.Responces;
+﻿using LibraryApi.Infrastructure.Authorization.Models;
+using System.Security.Claims;
 
 namespace LibraryApi.Application.Interfaces.Services
 {
     public interface IAuthService
     {
-        Task<TokenResponse> Login(UserLoginRequest user);
-        Task<TokenResponse> RefreshToken(RefreshTokenModel model);
-        Task<bool> RegisterUser(UserRegisterRequest user);
+        Task<string> GenerateAccessTokenString(User user);
+        string GenerateRefreshTokenString();
+        ClaimsPrincipal? GetTokenPrincipal(string token);
+
     }
 }
